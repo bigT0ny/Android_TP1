@@ -9,9 +9,12 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pam.abourassa.tp1.DownloadImage;
 import com.pam.abourassa.tp1.Objects.Country;
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.model.ForecastDBHelper;
+
+import java.io.File;
 
 /**
  * Created by Anthony on 09/12/2016.
@@ -39,10 +42,26 @@ public class CountryCursorAdapter extends CursorAdapter {
 
         if (country != null) {
             String countryCode = country.getCode();
-            String path = "http://www.geognos.com/api/en/countries/flag/" + countryCode + ".png";
+            String imageName = countryCode + ".png";
+            String url = "http://www.geognos.com/api/en/countries/flag/" + countryCode + ".png";
 
             ImageView flag_imageview = (ImageView) view.findViewById(R.id.country_listview_row_imageview_flag);
-            //Picasso.with(context).load(path).into(flag_imageview);
+
+            new DownloadImage(context, imageName).execute(url);
+            flag_imageview.setImageBitmap(DownloadImage.loadImageBitmap(context, imageName));
+
+            File file = context.getFileStreamPath(imageName);
+            if (file.exists()) {
+                System.out.println("File exist !");
+            }else {
+                System.out.println("File doesn't exist !");
+            }
+
+            if (DownloadImage.loadImageBitmap(context, imageName) != null) {
+                flag_imageview.setImageBitmap(DownloadImage.loadImageBitmap(context, imageName));
+            }else {
+                flag_imageview.setImageResource(R.mipmap.ic_flag);
+            }
 
             TextView countryName_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_countryName);
             TextView continentName_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_continentName);
