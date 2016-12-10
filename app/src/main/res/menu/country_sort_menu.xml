@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/country_menu_sort_icon"
+        android:icon="@mipmap/ic_sort"
+        android:title="Sort list"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/country_menu_sort_by_country_name"
+                android:title="@string/country_menu_sort_by_country_name"
+                app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/country_menu_sort_by_continent"
+                android:title="@string/country_menu_sort_by_continent"
+                app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/country_menu_sort_by_population"
+                android:title="@string/country_menu_sort_by_population"
+                app:showAsAction="ifRoom"/>
+        </menu>
+    </item>
+
+</menu>

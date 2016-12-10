@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/country_listview_row_imageview_flag"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_weight=".5"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@mipmap/ic_flag"/>
+
+                <TextView
+                    android:id="@+id/country_listview_row_textview_countryName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="@dimen/listview_row_textview_margin"
+                    android:layout_weight="4.5"
+                    android:gravity="center_vertical"
+                    android:text="@string/country_listview_row_textView_country_name"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/listview_row_text_size"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/country_listview_row_imageview_continent"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                app:srcCompat="@mipmap/ic_continent"/>
+
+            <TextView
+                android:id="@+id/country_listview_row_textview_continentName"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_weight="9"
+                android:gravity="center_vertical"
+                android:text="@string/country_listview_row_textView_continent_name"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/listview_row_text_size"
+                android:textStyle="bold"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/country_listview_row_imageview_population"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                app:srcCompat="@mipmap/ic_population"/>
+
+            <TextView
+                android:id="@+id/country_listview_row_textview_population"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/listview_row_textview_margin"
+                android:gravity="center_vertical"
+                android:text="@string/country_listview_row_textView_population"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/listview_row_text_size"
+                android:textStyle="bold"/>
+        </TableRow>
+    </LinearLayout>
+</LinearLayout>

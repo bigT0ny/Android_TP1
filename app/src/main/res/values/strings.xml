@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Forecasts</string>
+    <string name="main_activity_label_name">Pays</string>
+    <string name="city_fragment_activity_label_name">City</string>
+
+    <string name="country_menu_sort_by_country_name">Sort by country name</string>
+    <string name="country_menu_sort_by_continent">Sort by continent</string>
+    <string name="country_menu_sort_by_population">Sort by population</string>
+
+    <string name="country_listview_row_textView_country_name">Country</string>
+    <string name="country_listview_row_textView_continent_name">Continent</string>
+    <string name="country_listview_row_textView_population">Population</string>
+
+    <string name="city_listview_row_textview_city_name">City</string>
+    <string name="activity_city_fragment_city_research">Search a city</string>
+
+    <string name="sort_order_ASC">ASC</string>
+    <string name="sort_order_DES">DES</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
