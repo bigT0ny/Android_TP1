@@ -1,11 +1,11 @@
-package com.pam.abourassa.tp1.model;
+package com.pam.abourassa.tp1.model.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.pam.abourassa.tp1.Provider;
+import com.pam.abourassa.tp1.model.Provider;
 import com.pam.abourassa.tp1.R;
 
 import java.io.BufferedReader;
@@ -20,8 +20,10 @@ import java.io.InputStreamReader;
 public class DataImporter {
 
     public static void importCountryCsvInDatabase(Context context) {
-        SQLiteDatabase db =  Provider.getInstance().db(context).getWritableDatabase();
+        SQLiteDatabase database = Provider.getInstance().helper(context).getReadableDatabase();
         InputStream countryInput = context.getResources().openRawResource(R.raw.country);
+
+        // Sert a sauter la premiere ligne du fichier, qui n'est pas un pays.
         boolean skipFirstLine = true;
 
         try {
@@ -29,7 +31,7 @@ public class DataImporter {
             ContentValues values = new ContentValues();
             String line;
 
-            db.beginTransaction();
+            database.beginTransaction();
             while ((line = bufferedReader.readLine()) != null) {
                 if (! skipFirstLine) {
                     String[] columns = line.split(",");
@@ -53,7 +55,7 @@ public class DataImporter {
                     values.put(ForecastDBContracts.CountryTable.FIELD_CONTINENT, continent);
                     values.put(ForecastDBContracts.CountryTable.FIELD_POPULATION, Integer.parseInt(population));
 
-                    db.insert(ForecastDBContracts.CountryTable.TABLE_NAME, null, values);
+                    database.insert(ForecastDBContracts.CountryTable.TABLE_NAME, null, values);
                 }
 
                 skipFirstLine = false;
@@ -61,12 +63,16 @@ public class DataImporter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        db.setTransactionSuccessful();
-        db.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
+    /*
+     * Methode permettant d'importer les villes du fichier csv city.csv et de les mettre dans la
+     * table city de la base de donnees.
+     */
     public static void importCityCsvInDatabase(Context context) {
-        SQLiteDatabase db = Provider.getInstance().db(context).getWritableDatabase();
+        SQLiteDatabase database = Provider.getInstance().helper(context).getReadableDatabase();
         InputStream cityInput = context.getResources().openRawResource(R.raw.city);
         boolean skipFirstLine = true;
 
@@ -75,13 +81,13 @@ public class DataImporter {
             ContentValues values = new ContentValues();
             String line;
 
-            db.beginTransaction();
+            database.beginTransaction();
             while ((line = bufferedReader.readLine()) != null) {
                 if (! skipFirstLine) {
                     String[] columns = line.split(",");
 
                     String _id = columns[0].trim();
-                    String name = columns[1].trim();
+                    String name = columns[1].trim().toLowerCase();
                     String latitude = columns[2].trim();
                     String longitude = columns[3].trim();
                     String countryCode = columns[4].trim();
@@ -97,7 +103,7 @@ public class DataImporter {
                     values.put(ForecastDBContracts.CityTable.FIELD_LONGITUDE, longitude);
                     values.put(ForecastDBContracts.CityTable.FIELD_COUNTRY_CODE, countryCode);
 
-                    db.insert(ForecastDBContracts.CityTable.TABLE_NAME, null, values);
+                    database.insert(ForecastDBContracts.CityTable.TABLE_NAME, null, values);
                 }
 
                 skipFirstLine = false;
@@ -105,8 +111,9 @@ public class DataImporter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        db.setTransactionSuccessful();
-        db.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
+
 
 }

@@ -1,22 +1,36 @@
 <resources>
-    <string name="app_name">Forecasts</string>
-    <string name="main_activity_label_name">Pays</string>
+    <string name="app_name">Forecast</string>
+    <string name="main_activity_label_name">Country</string>
     <string name="city_fragment_activity_label_name">City</string>
-
+    <string name="country_sort_menu_title">Sort countries</string>
     <string name="country_menu_sort_by_country_name">Sort by country name</string>
     <string name="country_menu_sort_by_continent">Sort by continent</string>
     <string name="country_menu_sort_by_population">Sort by population</string>
-
     <string name="country_listview_row_textView_country_name">Country</string>
     <string name="country_listview_row_textView_continent_name">Continent</string>
     <string name="country_listview_row_textView_population">Population</string>
-
     <string name="city_listview_row_textview_city_name">City</string>
     <string name="activity_city_fragment_city_research">Search a city</string>
-
+    <string name="custom_action_bar_country_title">World countries</string>
+    <string name="custom_action_bar_country_textview_title">Title</string>
+    <string name="custom_action_bar_city_title">Cities</string>
     <string name="sort_order_ASC">ASC</string>
     <string name="sort_order_DES">DES</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="arrays_sort_ascending">Ascending sort</string>
+    <string name="arrays_sort_descending">Descending sort</string>
+    <string name="fragment_weather_forecast_textview_temperature">Temp</string>
+    <string name="fragment_weather_forecast_textview_description">Description</string>
+    <string name="fragment_weather_forecast_textview_pressure">Pressure</string>
+    <string name="fragment_weather_forecast_textview_pressure_unity">kPa</string>
+    <string name="fragment_weather_forecast_textview_humidity">Humidity</string>
+    <string name="fragment_weather_forecast_textview_humidity_unity">%</string>
+    <string name="fragment_weather_forecast_textview_sunset_sunrise">Sunset/Sunrise</string>
+    <string name="shared_preferences_city_id">City id</string>
+    <string name="warning_network_connection_flags_toast">The Wi-Fi network is not available,
+        you can\'t download the country flags !</string>
+    <string name="warning_network_connection_google_map_toast">The Wi-Fi network is not available,
+        you can\'t use google map !</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyBzYaLeIXOm15A8lZ4izXxxwV4pL2pQGWU
+    </string>
 </resources>

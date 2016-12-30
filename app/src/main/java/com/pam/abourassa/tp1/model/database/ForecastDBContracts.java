@@ -1,4 +1,4 @@
-package com.pam.abourassa.tp1.model;
+package com.pam.abourassa.tp1.model.database;
 
 import android.provider.BaseColumns;
 
@@ -7,6 +7,7 @@ import android.provider.BaseColumns;
  */
 
 public class ForecastDBContracts {
+
     // Constructeur vide permettant d'eviter l'instanciation d'un objet ForecastDBContract
     public ForecastDBContracts() {
     }

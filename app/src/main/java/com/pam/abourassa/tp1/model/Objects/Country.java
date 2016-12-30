@@ -1,10 +1,11 @@
-package com.pam.abourassa.tp1.Objects;
+package com.pam.abourassa.tp1.model.Objects;
 
 /**
  * Created by Anthony on 09/12/2016.
  */
 
 public class Country {
+    // Variables membres de l'objet Country
     private int id;
     private String name;
     private String localName;
@@ -12,6 +13,7 @@ public class Country {
     private String continent;
     private int population;
 
+    // Getters et setters
     public int getId () {
         return id;
     }
@@ -60,6 +62,7 @@ public class Country {
         this.continent = continent;
     }
 
+    // Contructeurs de Country
     public Country(int id, String name, String localName, String code, String continent, int population) {
         this.id = id;
         this.name = name;

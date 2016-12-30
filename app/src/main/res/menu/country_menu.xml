@@ -6,7 +6,7 @@
     <item
         android:id="@+id/country_menu_sort_icon"
         android:icon="@mipmap/ic_sort"
-        android:title="Sort list"
+        android:title="@string/country_sort_menu_title"
         app:showAsAction="ifRoom">
         <menu>
             <item
@@ -23,5 +23,6 @@
                 app:showAsAction="ifRoom"/>
         </menu>
     </item>
+
 
 </menu>

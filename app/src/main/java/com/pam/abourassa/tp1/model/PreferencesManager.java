@@ -1,4 +1,4 @@
-package com.pam.abourassa.tp1;
+package com.pam.abourassa.tp1.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;

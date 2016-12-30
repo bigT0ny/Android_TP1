@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Meteo</string>
+    <string name="activity_city_fragment_city_research">Recherche d\'une ville</string>
+    <string name="city_fragment_activity_label_name">Ville</string>
+    <string name="city_listview_row_textview_city_name">Ville</string>
+    <string name="country_listview_row_textView_continent_name">Continent</string>
+    <string name="country_listview_row_textView_country_name">Pays</string>
+    <string name="country_listview_row_textView_population">Population</string>
+    <string name="country_menu_sort_by_continent">Trie par continent</string>
+    <string name="country_menu_sort_by_country_name">Trie par nom de pays</string>
+    <string name="country_menu_sort_by_population">Trie par population</string>
+    <string name="country_sort_menu_title">Tri par pays</string>
+    <string name="custom_action_bar_country_textview_title">Titre</string>
+    <string name="custom_action_bar_country_title">Pays du monde</string>
+    <string name="main_activity_label_name">Pays</string>
+    <string name="shared_preferences_city_id">Id de la ville</string>
+    <string name="arrays_sort_descending">Trie descendant</string>
+    <string name="arrays_sort_ascending">Trie ascendant</string>
+    <string name="custom_action_bar_city_title">Villes</string>
+    <string name="fragment_weather_forecast_textview_description">Description</string>
+    <string name="fragment_weather_forecast_textview_humidity">Humidite</string>
+    <string name="fragment_weather_forecast_textview_humidity_unity">%</string>
+    <string name="fragment_weather_forecast_textview_pressure">Pression</string>
+    <string name="fragment_weather_forecast_textview_pressure_unity">kPa</string>
+    <string name="fragment_weather_forecast_textview_sunset_sunrise">Coucher du soleil/Lever du soleil</string>
+    <string name="warning_network_connection_flags_toast">La connection Wi-Fi n\'est pas disponible, vous ne pouvez pas telecharger les drapeaux des pays !</string>
+    <string name="warning_network_connection_google_map_toast">La connection Wi-Fi n\'est pas disponible, vous ne pouvez pas utiliser google map !</string>
+</resources>

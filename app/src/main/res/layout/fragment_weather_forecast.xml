@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_margin_16"
+        android:layout_marginTop="@dimen/widget_margin_8"
+        android:text="@string/fragment_weather_forecast_textview_temperature"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size_40"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/widget_margin_16"
+        android:text="@string/fragment_weather_forecast_textview_description"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_25"
+        app:layout_constraintBaseline_toBaselineOf="@+id/fragment_weather_forecast_textview_temperature"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_margin_16"
+        android:layout_marginTop="@dimen/widget_margin_24"
+        android:text="@string/fragment_weather_forecast_textview_pressure"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_20"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_forecast_textview_temperature"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_margin_16"
+        android:layout_marginTop="@dimen/widget_margin_8"
+        android:text="@string/fragment_weather_forecast_textview_humidity"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_20"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_forecast_seekbar_pressure"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_pressure_unity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/widget_margin_16"
+        android:text="@string/fragment_weather_forecast_textview_pressure_unity"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size_15"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_forecast_seekbar_pressure"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_weather_forecast_seekbar_pressure"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_humidity_unity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/widget_margin_16"
+        android:text="@string/fragment_weather_forecast_textview_humidity_unity"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size_15"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_forecast_seekbar_humidity"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_weather_forecast_seekbar_humidity"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_forecast_textview_sunset_sunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_margin_32"
+        android:text="@string/fragment_weather_forecast_textview_sunset_sunrise"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_20"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_forecast_imageview_sun"
+        app:layout_constraintLeft_toRightOf="@+id/fragment_weather_forecast_imageview_sun"
+        app:layout_constraintTop_toTopOf="@+id/fragment_weather_forecast_imageview_sun"/>
+
+    <SeekBar
+        android:id="@+id/fragment_weather_forecast_seekbar_pressure"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/fragment_weather_forecast_textview_temperature"
+        app:layout_constraintRight_toLeftOf="@+id/fragment_weather_forecast_textview_pressure_unity"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_forecast_textview_pressure"/>
+
+    <SeekBar
+        android:id="@+id/fragment_weather_forecast_seekbar_humidity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/fragment_weather_forecast_seekbar_pressure"
+        app:layout_constraintRight_toRightOf="@+id/fragment_weather_forecast_seekbar_pressure"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_forecast_textview_humidity"/>
+
+    <ImageView
+        android:id="@+id/fragment_weather_forecast_imageview_sun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/widget_margin_24"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_forecast_seekbar_humidity"
+        app:srcCompat="@mipmap/ic_sun"/>
+</android.support.constraint.ConstraintLayout>

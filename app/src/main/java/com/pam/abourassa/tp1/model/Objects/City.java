@@ -1,16 +1,18 @@
-package com.pam.abourassa.tp1.Objects;
+package com.pam.abourassa.tp1.model.Objects;
 
 /**
  * Created by Anthony on 09/12/2016.
  */
 
 public class City {
+    // Variables membres de l'objet City
     private int id;
     private String name;
-    private double latitude;
-    private double longitude;
+    private float latitude;
+    private float longitude;
     private String countryCode;
 
+    // Getters et setters
     public int getId () {
         return id;
     }
@@ -27,19 +29,19 @@ public class City {
         this.name = name;
     }
 
-    public double getLatitude () {
+    public float getLatitude () {
         return latitude;
     }
 
-    public void setLatitude (double latitude) {
+    public void setLatitude (float latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude () {
+    public float getLongitude () {
         return longitude;
     }
 
-    public void setLongitude (double longitude) {
+    public void setLongitude (float longitude) {
         this.longitude = longitude;
     }
 
@@ -51,7 +53,8 @@ public class City {
         this.countryCode = countryCode;
     }
 
-    public City(int id, String name, double latitude, double longitude, String countryCode) {
+    // Constructeurs de City
+    public City(int id, String name, float latitude, float longitude, String countryCode) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
@@ -59,7 +62,7 @@ public class City {
         this.countryCode = countryCode;
     }
 
-    public City(String name, double latitude, double longitude, String countryCode) {
+    public City(String name, float latitude, float longitude, String countryCode) {
         this(-1, name, latitude, longitude, countryCode);
     }
 
