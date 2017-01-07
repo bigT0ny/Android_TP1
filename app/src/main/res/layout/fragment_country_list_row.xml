@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +39,7 @@
                 android:gravity="start"
                 android:layout_marginStart="@dimen/widget_margin_10"
                 android:text="@string/country_listview_row_textView_country_name"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_20"
                 android:textStyle="bold"
                 tools:ignore="NestedWeights"/>
@@ -65,7 +66,7 @@
                     android:layout_marginTop="@dimen/widget_margin_5"
                     android:layout_marginStart="@dimen/widget_margin_10"
                     android:text="@string/country_listview_row_textView_continent_name"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_size_15"
                     android:textStyle="bold"
                     android:layout_weight="1"/>
@@ -92,7 +93,7 @@
                     android:layout_marginTop="@dimen/widget_margin_5"
                     android:layout_marginStart="@dimen/widget_margin_10"
                     android:text="@string/country_listview_row_textView_population"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_size_15"
                     android:textStyle="bold"
                     android:layout_weight="1"/>

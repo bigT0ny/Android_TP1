@@ -1,4 +1,4 @@
-package com.pam.abourassa.tp1.model;
+package com.pam.abourassa.tp1.model.providers;
 
 import android.content.Context;
 import android.database.Cursor;

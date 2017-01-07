@@ -1,4 +1,4 @@
-package com.pam.abourassa.tp1.flags;
+package com.pam.abourassa.tp1.model.providers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -3,16 +3,22 @@ package com.pam.abourassa.tp1.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.pam.abourassa.tp1.model.Objects.City;
-import com.pam.abourassa.tp1.model.PreferencesManager;
-import com.pam.abourassa.tp1.model.Provider;
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.fragments.CityFragment;
 import com.pam.abourassa.tp1.fragments.CountryFragment;
+import com.pam.abourassa.tp1.fragments.SettingsFragment;
+import com.pam.abourassa.tp1.model.Objects.City;
 import com.pam.abourassa.tp1.model.database.DataImporter;
+import com.pam.abourassa.tp1.model.providers.Provider;
+import com.pam.abourassa.tp1.utils.PreferencesManager;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     // Variable des shared preferences
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         firstLaunchApplication();
         getSharedPreferences();
 
-        if (sharedPreferences.contains(CityFragment.PREF_CITY_ID)) {
+        if (sharedPreferences.contains(CityFragment.PREF_CITY_ID) && savedInstanceState == null) {
             City city = Provider.getInstance().findCityById(this, cityId);
             startCountryFragment(city.getCountryCode());
         }else if (savedInstanceState == null){
@@ -48,9 +54,8 @@ public class MainActivity extends AppCompatActivity {
      * selectionne. Si le countryCode est vide, la liste des pays sera affichee immediatement.
      */
     private void startCountryFragment(String countryCode) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        CountryFragment countryFragment = CountryFragment.newInstance(countryCode);
-        fragmentTransaction.replace(R.id.activity_main_fragment, countryFragment)
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_main_fragment, CountryFragment.newInstance(countryCode))
                 .addToBackStack(null)
                 .commit();
     }
@@ -80,6 +85,13 @@ public class MainActivity extends AppCompatActivity {
         cityId = sharedPreferences.getInt(CityFragment.PREF_CITY_ID,0);
     }
 
+    public void getApplicationPreferences() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_main_fragment, new SettingsFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
     /**
      * Methode permettant de gerer le clic sur le bouton back, ce qui permet de revenir au fragment
      * precedent tout en executant les actions qu'il est necessaire de faire pour le bon
@@ -87,24 +99,48 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed () {
-        int currentFragment = getSupportFragmentManager().getBackStackEntryCount();
-
-        switch (currentFragment) {
-
-            case 1:
-                startCountryFragment("");
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        Fragment topFragment = fragmentList.get(fragmentList.size() - 1);
+        String topFragmentName = topFragment.getClass().getSimpleName();
+        switch (topFragmentName) {
+            case "CountryFragment":
+                //Toast.makeText(this, "You cannot back from this screen", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getSupportFragmentManager().getBackStackEntryCount(), Toast.LENGTH_LONG).show();
                 break;
-            case 2:
+            case "CityFragment":
                 CountryFragment.setCountryCode("");
+                Toast.makeText(this, getSupportFragmentManager().getBackStackEntryCount(), Toast.LENGTH_LONG).show();
+                super.onBackPressed();
                 break;
-            case 3:
+            case "WeatherFragment":
                 SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(CityFragment.PREF_CITY_ID);
-                editor.apply();
+                editor.commit();
+                Toast.makeText(this, getSupportFragmentManager().getBackStackEntryCount(), Toast.LENGTH_LONG).show();
+                super.onBackPressed();
+                break;
+            default:
+                super.onBackPressed();
                 break;
         }
-        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.preferences_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                getApplicationPreferences();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

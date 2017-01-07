@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.pam.abourassa.tp1.model.Provider;
 import com.pam.abourassa.tp1.R;
+import com.pam.abourassa.tp1.model.providers.Provider;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,7 +57,6 @@ public class DataImporter {
 
                     database.insert(ForecastDBContracts.CountryTable.TABLE_NAME, null, values);
                 }
-
                 skipFirstLine = false;
             }
         } catch (IOException e) {
@@ -105,7 +104,6 @@ public class DataImporter {
 
                     database.insert(ForecastDBContracts.CityTable.TABLE_NAME, null, values);
                 }
-
                 skipFirstLine = false;
             }
         } catch (IOException e) {
@@ -114,6 +112,5 @@ public class DataImporter {
         database.setTransactionSuccessful();
         database.endTransaction();
     }
-
 
 }

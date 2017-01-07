@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,17 +17,16 @@ import android.widget.Spinner;
 
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.actionBars.CustomActionBar;
-import com.pam.abourassa.tp1.adapters.CountryCursorAdapter;
 import com.pam.abourassa.tp1.enums.SortOrder;
 import com.pam.abourassa.tp1.model.Objects.Country;
-import com.pam.abourassa.tp1.model.Provider;
+import com.pam.abourassa.tp1.model.adapters.CountryCursorAdapter;
 import com.pam.abourassa.tp1.model.database.ForecastDBContracts;
-
+import com.pam.abourassa.tp1.model.providers.Provider;
 
 public class CountryFragment extends Fragment {
-    public static final String KEY_SORT_ORDER = "ca.cs.equipe3.forecast.activities.KEY_SORT_ORDER";
-    public static final String KEY_SORT_FIELD_1 = "ca.cs.equipe3.forecast.activities.KEY_SORT_FIELD_1";
-    public static final String KEY_SORT_FIELD_2 = "ca.cs.equipe3.forecast.activities.KEY_SORT_FIELD_2";
+    public static final String KEY_SORT_ORDER = "com.pam.abourassa.tp1.fragments.KEY_SORT_ORDER";
+    public static final String KEY_SORT_FIELD_1 = "com.pam.abourassa.tp1.fragments.KEY_SORT_FIELD_1";
+    public static final String KEY_SORT_FIELD_2 = "com.pam.abourassa.tp1.fragments.KEY_SORT_FIELD_2";
 
     // Variables de CountryFragment
     private Context context;
@@ -45,7 +43,9 @@ public class CountryFragment extends Fragment {
         CountryFragment.countryCode = countryCode;
     }
 
-    public CountryFragment () {}
+    public CountryFragment () {
+
+    }
 
     // Permet de passer un countryCode pour lancer le countryFragment
     public static CountryFragment newInstance(String cityCountryCode) {
@@ -77,6 +77,7 @@ public class CountryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_country, container, false);
         sortOrder_spinner = (Spinner) view.findViewById(R.id.activity_main_spinner_sortOrder);
         countriesList_listview = (ListView) view.findViewById(R.id.activity_main_listview_countries);
+
         return view;
     }
 
@@ -97,10 +98,8 @@ public class CountryFragment extends Fragment {
 
         // Recupere le contexte du MainActivity
         context = getActivity();
-
         // Permet d'avoir un menu avec des options dans l'actionBar
         setHasOptionsMenu(true);
-
         // Permet de mettre une vue personnalisee dans l'actionBar
         setCountryActionBar();
 
@@ -123,9 +122,8 @@ public class CountryFragment extends Fragment {
 
     // Methode permettant de lancer le cityFragment a l'aide du id du pays selectionner ou enregistrer.
     public void startCountryFragment(Country country) {
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        CityFragment cityFragment = CityFragment.newInstance(country.getId());
-        fragmentTransaction.replace(R.id.activity_main_fragment, cityFragment)
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_main_fragment, CityFragment.newInstance(country.getId()))
                 .addToBackStack(null)
                 .commit();
     }
@@ -165,7 +163,7 @@ public class CountryFragment extends Fragment {
 
     private void setCountryActionBar() {
         String actionBarTitle = getResources().getString(R.string.custom_action_bar_country_title);
-        int resId = R.mipmap.ic_flag;
+        int resId = R.mipmap.ic_country_flags;
 
         CustomActionBar.setActionBar(getActivity(), actionBarTitle, resId);
     }
@@ -194,20 +192,24 @@ public class CountryFragment extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected (MenuItem item) {
-        // Triage des pays selon le nom du pays
-        if (item.getItemId() == R.id.country_menu_sort_by_country_name) {
-            sortField1 = ForecastDBContracts.CountryTable.FIELD_NAME;
-            sortField2 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
-            // Triage des pays selon le nom du continent
-        }else if (item.getItemId() == R.id.country_menu_sort_by_continent) {
-            sortField1 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
-            sortField2 = ForecastDBContracts.CountryTable.FIELD_NAME;
-            // Triage des pays selon la population du pays
-        }else if (item.getItemId() == R.id.country_menu_sort_by_population) {
-            sortField1 = ForecastDBContracts.CountryTable.FIELD_POPULATION;
-            sortField2 = ForecastDBContracts.CountryTable.FIELD_NAME;
-        } else {
-            return super.onOptionsItemSelected(item);
+        // Triage des pays selon le nom du pays et le nom du continent
+        switch (item.getItemId()) {
+            case R.id.country_menu_sort_by_country_name:
+                sortField1 = ForecastDBContracts.CountryTable.FIELD_NAME;
+                sortField2 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
+                break;
+            // Triage des pays selon le nom du continent et le nom du pays
+            case R.id.country_menu_sort_by_continent:
+                sortField1 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
+                sortField2 = ForecastDBContracts.CountryTable.FIELD_NAME;
+                break;
+            // Triage des pays selon la population et le nom du pays
+            case R.id.country_menu_sort_by_population:
+                sortField1 = ForecastDBContracts.CountryTable.FIELD_POPULATION;
+                sortField2 = ForecastDBContracts.CountryTable.FIELD_NAME;
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
         Provider.getInstance().countryCursorOrdered(context, sortField1, sortField2, sortOrder);

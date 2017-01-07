@@ -10,8 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,21 +17,20 @@ import android.widget.ListView;
 
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.actionBars.CustomActionBar;
-import com.pam.abourassa.tp1.adapters.CityCursorAdapter;
-import com.pam.abourassa.tp1.flags.FlagsProvider;
 import com.pam.abourassa.tp1.model.Objects.City;
 import com.pam.abourassa.tp1.model.Objects.Country;
-import com.pam.abourassa.tp1.model.Provider;
+import com.pam.abourassa.tp1.model.adapters.CityCursorAdapter;
+import com.pam.abourassa.tp1.model.providers.FlagsProvider;
+import com.pam.abourassa.tp1.model.providers.Provider;
 
 import java.io.File;
+
 public class CityFragment extends Fragment {
-    public static final String PREF_CITY_ID = "ca.cs.equipe3.forecast.fragments.PREF_CITY_ID";
-
+    public static final String PREF_CITY_ID = "com.pam.abourassa.tp1.fragments.PREF_CITY_ID";
     // Variable permettant de sauvegarder le id du pays selectionner ou enregistrer.
-    public static final String ARG_COUNTRY_ID = "ca.cs.equipe3.forecast.fragments.ARG_COUNTRY_ID";
-
+    public static final String ARG_COUNTRY_ID = "com.pam.abourassa.tp1.fragments.ARG_COUNTRY_ID";
     // Variable permettant de sauvegarder l'etat du cityFragment lors de la rotation de l'appareil.
-    public static final String KEY_SEARCH_CRITERIA = "ca.cs.equipe3.forecast.fragments.KEY_SEARCH_CRITERIA";
+    public static final String KEY_SEARCH_CRITERIA = "com.pam.abourassa.tp1.fragments.KEY_SEARCH_CRITERIA";
 
     // Variables de cityFragment
     private CityCursorAdapter cityCursorAdapter;
@@ -201,18 +198,6 @@ public class CityFragment extends Fragment {
         Bitmap bitmap = FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile);
 
         CustomActionBar.setActionBar(getActivity(), actionBarTitle, bitmap);
-    }
-
-    /**
-     * Methode permettant d'enlever le focus sur la barre de recherche lors du lancement du fragment.
-     * Donc, le clavier ne s'ouvre pas lorsque le fragment est afficher a l'ecran.
-     */
-    @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        citySearchBar.clearFocus();
-        menu.clear();
     }
 
     /*

@@ -23,7 +23,25 @@
     <string name="fragment_weather_forecast_textview_humidity_unity">%</string>
     <string name="fragment_weather_forecast_textview_pressure">Pression</string>
     <string name="fragment_weather_forecast_textview_pressure_unity">kPa</string>
-    <string name="fragment_weather_forecast_textview_sunset_sunrise">Coucher du soleil/Lever du soleil</string>
-    <string name="warning_network_connection_flags_toast">La connection Wi-Fi n\'est pas disponible, vous ne pouvez pas telecharger les drapeaux des pays !</string>
-    <string name="warning_network_connection_google_map_toast">La connection Wi-Fi n\'est pas disponible, vous ne pouvez pas utiliser google map !</string>
+    <string name="warning_network_connection_flags_toast">La connection Wi-Fi n\'est pas disponible,
+        vous ne pouvez pas telecharger les drapeaux des pays !</string>
+    <string name="warning_network_connection_google_map_toast">La connection Wi-Fi n\'est pas disponible,vous ne
+        pouvez pas utiliser google map et vous ne pouvez pas voir les previsions meteoroligiques de la ville !</string>
+    <string name="fragment_weather_forecast_textview_sunrise">Lever du soleil:</string>
+    <string name="fragment_weather_forecast_textview_sunset">Coucher du soleil:</string>
+    <string name="fragment_weather_forecast_textview_temperature">Temp</string>
+    <string name="preferences_app_language_summary_on">Cliquez pour mettre l\'application en anglais</string>
+    <string name="preferences_app_language_title">Langage de l\'application</string>
+    <string name="preferences_category_application_settings">PARAMETRES DE L\'APPLICATION</string>
+    <string name="preferences_category_country_settings">PARAMETRES DES PAYS</string>
+    <string name="preferences_exit_settings_summary">Cliquez pour quitter le menu des preferences</string>
+    <string name="preferences_exit_settings_title">Quitter les preferences</string>
+    <string name="preferences_show_country_name_language_summary_off">Cliquez pour afficher le nom des pays en anglais</string>
+    <string name="preferences_show_country_name_language_summary_on">Cliquez pour afficher le nom des pays dans la langue locale</string>
+    <string name="preferences_show_country_name_language_title">Langage des noms de pays</string>
+    <string name="preferences_show_flags_summary_off">Cliquez pour afficher les drapeaux des pays</string>
+    <string name="preferences_show_flags_summary_on">Cliquez pour enlever les drapeaux des pays</string>
+    <string name="preferences_show_flags_title">Afficher les drapeaux des pays</string>
+    <string name="preferences_action_bar_title">PARAMETRES DE L\'APPLICATION</string>
+    <string name="preferences_app_language_summary_off">Cliquez pour mettre en francais</string>
 </resources>

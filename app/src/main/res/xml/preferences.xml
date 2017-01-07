@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/preferences_category_country_settings">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/preferences_show_flags"
+            android:summaryOff="@string/preferences_show_flags_summary_off"
+            android:summaryOn="@string/preferences_show_flags_summary_on"
+            android:title="@string/preferences_show_flags_title"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/preferences_show_country_name_language"
+            android:summaryOff="@string/preferences_show_country_name_language_summary_off"
+            android:summaryOn="@string/preferences_show_country_name_language_summary_on"
+            android:title="@string/preferences_show_country_name_language_title"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preferences_category_application_settings">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/preferences_app_language"
+            android:summaryOff="@string/preferences_app_language_summary_off"
+            android:summaryOn="@string/preferences_app_language_summary_on"
+            android:title="@string/preferences_app_language_title"/>
+        <Preference
+            android:key="@string/preferences_exit_settings"
+            android:summary="@string/preferences_exit_settings_summary"
+            android:title="@string/preferences_exit_settings_title"/>
+    </PreferenceCategory>
+</PreferenceScreen>

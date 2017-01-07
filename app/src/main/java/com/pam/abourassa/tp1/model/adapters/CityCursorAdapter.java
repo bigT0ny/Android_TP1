@@ -1,4 +1,4 @@
-package com.pam.abourassa.tp1.adapters;
+package com.pam.abourassa.tp1.model.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,7 +11,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.pam.abourassa.tp1.model.Objects.City;
-import com.pam.abourassa.tp1.model.Provider;
+import com.pam.abourassa.tp1.model.providers.Provider;
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.model.database.ForecastDBContracts;
 
@@ -53,7 +53,7 @@ public class CityCursorAdapter extends CursorAdapter implements SectionIndexer {
     public void bindView (View view, Context context, Cursor cursor) {
         City city = Provider.getInstance().getCityFromCursor(cursor);
         String cityName = city.getName();
-        String cityNameFirstLetterCapitalise = "";
+        String cityNameFirstLetterCapitalize = "";
         TextView cityName_textview = (TextView) view.findViewById(R.id.city_list_row_textview_cityName);
 
         if (city != null) {
@@ -63,8 +63,8 @@ public class CityCursorAdapter extends CursorAdapter implements SectionIndexer {
              * csv alors que les autres villes commencent par une majuscule.
              */
             if (! city.getName().isEmpty()) {
-                cityNameFirstLetterCapitalise = cityName.substring(0, 1).toUpperCase() + cityName.substring(1);
-                cityName_textview.setText(cityNameFirstLetterCapitalise);
+                cityNameFirstLetterCapitalize = cityName.substring(0, 1).toUpperCase() + cityName.substring(1);
+                cityName_textview.setText(cityNameFirstLetterCapitalize);
             }else {
                 cityName_textview.setText(cityName);
             }

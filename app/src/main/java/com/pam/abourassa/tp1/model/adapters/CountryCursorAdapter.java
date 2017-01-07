@@ -1,6 +1,7 @@
-package com.pam.abourassa.tp1.adapters;
+package com.pam.abourassa.tp1.model.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,15 @@ import android.widget.Toast;
 
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.enums.SortOrder;
-import com.pam.abourassa.tp1.flags.FlagsProvider;
-import com.pam.abourassa.tp1.model.DownloadImageFromUrl;
+import com.pam.abourassa.tp1.fragments.SettingsFragment;
+import com.pam.abourassa.tp1.model.providers.FlagsProvider;
+import com.pam.abourassa.tp1.networkConnection.DownloadImageFromUrl;
 import com.pam.abourassa.tp1.model.Objects.Country;
-import com.pam.abourassa.tp1.model.Provider;
+import com.pam.abourassa.tp1.model.providers.Provider;
 import com.pam.abourassa.tp1.networkConnection.NetworkConnection;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Anthony on 09/12/2016.
@@ -55,6 +58,12 @@ public class CountryCursorAdapter extends CursorAdapter {
     public void bindView (View view, Context context, Cursor cursor) {
         // Recuperation de l'objet country
         Country country = Provider.getInstance().getCountryFromCursor(cursor);
+        /*
+         * Permet de verifier la preference afin de savoir s'il faut afficher les drapeau des pays.
+         * Si la preference est a true, les drapeaux sont affiches, sinon, ils n'apparaissent pas.
+         */
+        SharedPreferences preferences = context.getSharedPreferences(SettingsFragment.PREFERENCES_SETTINGS, Context.MODE_PRIVATE);
+        boolean showFlags = preferences.getBoolean(SettingsFragment.SHOW_FLAGS, false);
 
         if (country != null) {
             // Nom de l'image qui sera sauvegardee
@@ -80,32 +89,54 @@ public class CountryCursorAdapter extends CursorAdapter {
              * apparait pour indiquer a l'utilisateur qu'il ne peut pas telecharger les images depuis
              * Internet.
              */
-            if (cacheFile.exists()) {
-                flag_imageview.setImageBitmap(FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile));
+            if (! showFlags) {
+                flag_imageview.setVisibility(View.GONE);
             }else {
-                if(NetworkConnection.verifyNetworkConnection(context)) {
-                    new DownloadImageFromUrl(cacheFile).execute(urlString);
+
+                if (cacheFile.exists()) {
                     flag_imageview.setImageBitmap(FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile));
-                }else {
-                    if (! noConnection) {
-                        Toast.makeText(context, R.string.warning_network_connection_flags_toast,
-                                Toast.LENGTH_LONG).show();
-                        noConnection = true;
+                } else {
+                    if (NetworkConnection.verifyNetworkConnection(context)) {
+                        //new DownloadImageFromUrl(cacheFile).execute(urlString);
+
+                        try {
+                            FlagsProvider.getInstance().saveImageInCacheFile(new DownloadImageFromUrl(cacheFile).execute(urlString).get(), cacheFile);
+                            flag_imageview.setImageBitmap(FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile));
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        if (! noConnection) {
+                            Toast.makeText(context, R.string.warning_network_connection_flags_toast,
+                                    Toast.LENGTH_LONG).show();
+                            noConnection = true;
+                        }
                     }
                 }
+
+                /*
+             * Si le bitmap retourne la valeur null, cela veut dire que le pays n'a pas de drapeau.
+             * Donc, un mipmap representant un drapeau est afficher a la place.
+             */
+                if (FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile) == null) {
+                    flag_imageview.setImageResource(R.mipmap.ic_flag);
+                }
+
+                flag_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 
             /*
-             *Si le bitmap retourne la valeur null, cela veut dire que le pays n'a pas de drapeau.
-             *Donc, un mipmap representant un drapeau est afficher a la place.
+             * Permet de verifier la preference afin de savoir s'il faut afficher les noms des pays
+             * en anglais ou dans la langue locale du pays et est afficher a l'ecran.
              */
-            if (FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile) == null) {
-                flag_imageview.setImageResource(R.mipmap.ic_flag);
-            }
+            boolean countryNameLanguage = preferences.getBoolean(SettingsFragment.COUNTRY_NAME_LANGUAGE, false);
 
-            // Les donnees sont envoyees dans les composantes graphiques pour les afficher a l'ecran.
-            flag_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
-            countryName_textview.setText(country.getName());
+            if (countryNameLanguage) {
+                countryName_textview.setText(country.getName());
+            }else {
+                countryName_textview.setText(country.getLocalName());
+            }
+            // Affiche a l'ecran le nom du continent et la population de chaque pays
             continentName_textview.setText(country.getContinent());
             population_textview.setText(String.valueOf(country.getPopulation()));
         }
