@@ -14,6 +14,9 @@ import com.pam.abourassa.tp1.model.database.ForecastDBHelper;
  * Created by Anthony on 09/12/2016.
  */
 
+/**
+ * Provider permettant de gerer les methodes pour acceder a la base de donnees.
+ */
 public class Provider {
     private static Provider instance = new Provider();
 

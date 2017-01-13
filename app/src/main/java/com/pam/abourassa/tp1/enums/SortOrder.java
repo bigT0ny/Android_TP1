@@ -4,6 +4,9 @@ package com.pam.abourassa.tp1.enums;
  * Created by Anthony on 09/12/2016.
  */
 
+/**
+ * Enum servant pour le tri ascendant et descendant des pays.
+ */
 public enum SortOrder {
     ASC(0, "ASC"),
     DESC(1, "DESC");

@@ -13,11 +13,11 @@ import android.widget.Toast;
 
 import com.pam.abourassa.tp1.R;
 import com.pam.abourassa.tp1.enums.SortOrder;
-import com.pam.abourassa.tp1.fragments.SettingsFragment;
-import com.pam.abourassa.tp1.model.providers.FlagsProvider;
-import com.pam.abourassa.tp1.networkConnection.DownloadImageFromUrl;
+import com.pam.abourassa.tp1.fragments.PreferencesFragment;
 import com.pam.abourassa.tp1.model.Objects.Country;
+import com.pam.abourassa.tp1.model.providers.FlagsProvider;
 import com.pam.abourassa.tp1.model.providers.Provider;
+import com.pam.abourassa.tp1.networkConnection.DownloadImageTask;
 import com.pam.abourassa.tp1.networkConnection.NetworkConnection;
 
 import java.io.File;
@@ -28,6 +28,14 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class CountryCursorAdapter extends CursorAdapter {
+    // Url de base permettant de telecharger les drapeaux des pays
+    public static final String URL_FLAG_IMAGE = "http://www.geognos.com/api/en/countries/flag/";
+    // Variables associees a celles de la vue
+    private TextView countryName_textview;
+    private TextView continentName_textview;
+    private TextView population_textview;
+    private ImageView flag_imageview;
+    // Variable permettant de garder l'etat de la connection tout au long de l'application
     private static boolean noConnection = false;
 
     /*
@@ -37,6 +45,9 @@ public class CountryCursorAdapter extends CursorAdapter {
         super(context, cursor, 0);
     }
 
+    /**
+     * Permet de mettre a jour le countryCursorAdapter
+     */
     @Override
     public void notifyDataSetChanged () {
         super.notifyDataSetChanged();
@@ -44,7 +55,7 @@ public class CountryCursorAdapter extends CursorAdapter {
 
     /*
      * Methode permettant de faire afficher un layout a l'ecran.
-      */
+     */
     @Override
     public View newView (Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.fragment_country_list_row, parent, false);
@@ -58,54 +69,51 @@ public class CountryCursorAdapter extends CursorAdapter {
     public void bindView (View view, Context context, Cursor cursor) {
         // Recuperation de l'objet country
         Country country = Provider.getInstance().getCountryFromCursor(cursor);
-        /*
-         * Permet de verifier la preference afin de savoir s'il faut afficher les drapeau des pays.
-         * Si la preference est a true, les drapeaux sont affiches, sinon, ils n'apparaissent pas.
-         */
-        SharedPreferences preferences = context.getSharedPreferences(SettingsFragment.PREFERENCES_SETTINGS, Context.MODE_PRIVATE);
-        boolean showFlags = preferences.getBoolean(SettingsFragment.SHOW_FLAGS, false);
 
         if (country != null) {
+            // initialisation des composantes de la vue
+            initialization(view);
             // Nom de l'image qui sera sauvegardee
             String imageName = country.getCode() + ".png";
-
-            // URL permettant d'aller telecharger l'image sur Internet
-            String urlString = "http://www.geognos.com/api/en/countries/flag/" + country.getCode() + ".png";
+            // Url permettant d'aller telecharger l'image sur Internet
+            String urlString = URL_FLAG_IMAGE + country.getCode() + ".png";
             // Fichier cache ou sera enregistrer les drapeaux.
             File cacheFile = new File(context.getCacheDir(), imageName);
+            // Permet de recuperer la valeur de la preference show_flags choisi par l'utilisateur
+            SharedPreferences preferences = context.getSharedPreferences(PreferencesFragment.PREFERENCES_SETTINGS,
+                    Context.MODE_PRIVATE);
+            boolean showFlags = preferences.getBoolean(PreferencesFragment.SHOW_FLAGS, false);
 
-            // Association des variables du programme avec les variables de la vue.
-            TextView countryName_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_countryName);
-            TextView continentName_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_continentName);
-            TextView population_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_population);
-            ImageView flag_imageview = (ImageView) view.findViewById(R.id.country_listview_row_imageview_flag);
-
-            /*
-             * Si l'image est enregistree dans la cache, on telecharge l'image depuis la cache et elle
-             * est affichee dans un imageview. Sinon, l'image est telechargee depuis Internet a l'aide
-             * d'une URL et elle est sauvegardee dans la cache. Une fois sauvegardee, on telecharge
-             * l'image depuis la cache. Pour pouvoir telecharger les images depuis Internet, il y a
-             * une verification de la connection faite. S'il n'y a pas de connection, un message
-             * apparait pour indiquer a l'utilisateur qu'il ne peut pas telecharger les images depuis
-             * Internet.
-             */
+            // Si la variable showFlags, recuperee du fichier des preferences est a false, on n'affiche
+            // pas les drapeaux a l'ecran.
             if (! showFlags) {
                 flag_imageview.setVisibility(View.GONE);
             }else {
-
+                // Si le dossier cache ou est enregistree l'image, on recuper l'image depuis ce
+                // fichier et on la fait afficher dans un imagview.
                 if (cacheFile.exists()) {
                     flag_imageview.setImageBitmap(FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile));
                 } else {
+                    // Verification de la connexion internet pour telecharger les drapeaux
                     if (NetworkConnection.verifyNetworkConnection(context)) {
-                        //new DownloadImageFromUrl(cacheFile).execute(urlString);
-
+                        //new DownloadImageTask(cacheFile).execute(urlString);
+                        /*
+                         * Si la connexion internet est disponible, on lance le telechargement sur
+                         * internet en asynchrone et on fait afficher l'image dans un imageview.
+                         */
                         try {
-                            FlagsProvider.getInstance().saveImageInCacheFile(new DownloadImageFromUrl(cacheFile).execute(urlString).get(), cacheFile);
+                            FlagsProvider.getInstance().saveImageInCacheFile(new DownloadImageTask()
+                                    .execute(urlString).get(), cacheFile);
                             flag_imageview.setImageBitmap(FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile));
                         } catch (InterruptedException | ExecutionException e) {
                             e.printStackTrace();
                         }
                     } else {
+                        /*
+                         * Si la connexion est indisponible, un message est afficher a l'ecran et la
+                         * variable noConnection est mise a true pour afficher le Toast une seule
+                         * fois, car sinon le message apparait en tout temps dans le listview.
+                         */
                         if (! noConnection) {
                             Toast.makeText(context, R.string.warning_network_connection_flags_toast,
                                     Toast.LENGTH_LONG).show();
@@ -113,15 +121,14 @@ public class CountryCursorAdapter extends CursorAdapter {
                         }
                     }
                 }
-
                 /*
-             * Si le bitmap retourne la valeur null, cela veut dire que le pays n'a pas de drapeau.
-             * Donc, un mipmap representant un drapeau est afficher a la place.
-             */
+                * Si le bitmap retourne la valeur null, cela veut dire que le pays n'a pas de drapeau.
+                * Donc, un mipmap representant un drapeau est afficher a la place.
+                */
                 if (FlagsProvider.getInstance().loadImageFromCacheFile(cacheFile) == null) {
                     flag_imageview.setImageResource(R.mipmap.ic_flag);
                 }
-
+                // Permet de scaler l'image
                 flag_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 
@@ -129,7 +136,7 @@ public class CountryCursorAdapter extends CursorAdapter {
              * Permet de verifier la preference afin de savoir s'il faut afficher les noms des pays
              * en anglais ou dans la langue locale du pays et est afficher a l'ecran.
              */
-            boolean countryNameLanguage = preferences.getBoolean(SettingsFragment.COUNTRY_NAME_LANGUAGE, false);
+            boolean countryNameLanguage = preferences.getBoolean(PreferencesFragment.COUNTRY_NAME_LANGUAGE, false);
 
             if (countryNameLanguage) {
                 countryName_textview.setText(country.getName());
@@ -140,6 +147,16 @@ public class CountryCursorAdapter extends CursorAdapter {
             continentName_textview.setText(country.getContinent());
             population_textview.setText(String.valueOf(country.getPopulation()));
         }
+    }
+
+    /**
+     * Association des variables du programme avec les variables de la vue.
+     */
+    private void initialization(View view) {
+        countryName_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_countryName);
+        continentName_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_continentName);
+        population_textview = (TextView) view.findViewById(R.id.country_listview_row_textview_population);
+        flag_imageview = (ImageView) view.findViewById(R.id.country_listview_row_imageview_flag);
     }
 
 }

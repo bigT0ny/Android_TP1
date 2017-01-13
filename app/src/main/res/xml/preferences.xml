@@ -3,13 +3,13 @@
     <PreferenceCategory
         android:title="@string/preferences_category_country_settings">
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/preferences_show_flags"
             android:summaryOff="@string/preferences_show_flags_summary_off"
             android:summaryOn="@string/preferences_show_flags_summary_on"
             android:title="@string/preferences_show_flags_title"/>
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/preferences_show_country_name_language"
             android:summaryOff="@string/preferences_show_country_name_language_summary_off"
             android:summaryOn="@string/preferences_show_country_name_language_summary_on"
@@ -18,7 +18,7 @@
     <PreferenceCategory
         android:title="@string/preferences_category_application_settings">
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/preferences_app_language"
             android:summaryOff="@string/preferences_app_language_summary_off"
             android:summaryOn="@string/preferences_app_language_summary_on"

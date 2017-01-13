@@ -17,8 +17,16 @@ import java.io.InputStreamReader;
  * Created by Anthony on 09/12/2016.
  */
 
+/**
+ * Classe permettant l'importation des donnees provenant des fichiers csv (country et city), qui se
+ * trouvent dans le fichier raw du projet (dans res), dans la base de donnees.
+ */
 public class DataImporter {
 
+    /*
+     * Methode permettant d'importer les pays du fichier country.csv et de les mettre dans la
+     * table country de la base de donnees.
+     */
     public static void importCountryCsvInDatabase(Context context) {
         SQLiteDatabase database = Provider.getInstance().helper(context).getReadableDatabase();
         InputStream countryInput = context.getResources().openRawResource(R.raw.country);

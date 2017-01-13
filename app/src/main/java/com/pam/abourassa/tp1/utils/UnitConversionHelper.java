@@ -8,28 +8,31 @@ import java.util.Locale;
  * Created by Anthony on 30/12/2016.
  */
 
-public class ConversionHelper {
+/**
+ * Classe permettant de faire la conversion d'unite comme la temperature (celsius - fahrenheit), la
+ * pressiont (hPa - kPa) et le temps (unix time - standard time).
+ */
+public class UnitConversionHelper {
     /**
-     * Return a float that represent a temperature in Fahrenheit
+     * Methode permettant de convertir la temperature en celsius en fahrenheit
      */
     public static float celsisuToFahrenheit(float celsiusTemperature) {
         return ((celsiusTemperature * (9/5f)) + 32.00f);
     }
 
     /**
-     * Return pressure in kPa
+     * Methode permettant de convertir la pression (hPa) en kPa
      */
     public static float hpaToKpa(float hpa) {
         return (hpa / 10);
     }
 
     /**
-     * Convert unix time to standard time
+     * Methode permettant de convertir le temps (unixtime) en temps standard (heure:minute)
      */
     public static String unixTimeToStandardTime (long unixTimeStamp) {
         Date date = new Date(unixTimeStamp * 1000L);
-        String result = new SimpleDateFormat("HH:mm", Locale.CANADA_FRENCH).format(date);
-        return result;
+        return new SimpleDateFormat("HH:mm", Locale.CANADA_FRENCH).format(date);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.pam.abourassa.tp1.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,39 +24,47 @@ import com.pam.abourassa.tp1.model.adapters.CountryCursorAdapter;
 import com.pam.abourassa.tp1.model.database.ForecastDBContracts;
 import com.pam.abourassa.tp1.model.providers.Provider;
 
+/**
+ * Classe permettant de faire afficher une liste de pays trier selon 2 criteres choisis. Il faut
+ * egalement trier les pays en ordre ascendant ou descendant. Il y a une actionBar avec un menu avec
+ * des options permettant de trier les pays selon des criteres. Recuperation des pays a l'aide d'une
+ * requete SQL dans la base de donnees pour les faire afficher dans un listview.
+ */
 public class CountryFragment extends Fragment {
+    public static final String PREF_COUNTRY_CODE = "com.pam.abourassa.tp1.fragments.PREF_COUNTRY_CODE ";
+    public static final String ARG_COUNTRY_CODE = "com.pam.abourassa.tp1.fragments.ARG_COUNTRY_CODE";
     public static final String KEY_SORT_ORDER = "com.pam.abourassa.tp1.fragments.KEY_SORT_ORDER";
     public static final String KEY_SORT_FIELD_1 = "com.pam.abourassa.tp1.fragments.KEY_SORT_FIELD_1";
     public static final String KEY_SORT_FIELD_2 = "com.pam.abourassa.tp1.fragments.KEY_SORT_FIELD_2";
 
     // Variables de CountryFragment
+    private CountryCursorAdapter countryCursorAdapter;
     private Context context;
-    private String sortField1;
-    private String sortField2;
-    private SortOrder sortOrder;
     private Spinner sortOrder_spinner;
     private ListView countriesList_listview;
-    private CountryCursorAdapter countryCursorAdapter;
-    private static String countryCode;
+    private SortOrder sortOrder;
+    private String sortField1;
+    private String sortField2;
 
-    // Setter permettant de reseter le countryCode lors du back lorsqu'une ville a ete sauvegardee.
-    public static void setCountryCode (String countryCode) {
-        CountryFragment.countryCode = countryCode;
-    }
-
+    // Constructeur vide necessaire pour un fragment
     public CountryFragment () {
-
     }
 
-    // Permet de passer un countryCode pour lancer le countryFragment
-    public static CountryFragment newInstance(String cityCountryCode) {
-        countryCode = cityCountryCode;
-        return new CountryFragment();
+    /**
+     * Methode permettant de recuperer le countryCode afin de reconstruire le countryFragment dans
+     * le cas ou il y a un countryCode d'enregistrer dans les shared preferences.
+      */
+    public static CountryFragment newInstance(String countryCode) {
+        CountryFragment countryFragment = new CountryFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_COUNTRY_CODE, countryCode);
+        countryFragment.setArguments(args);
+        return countryFragment;
     }
 
     /**
      * Methode utilisee lors de la rotation de l'appareil pour recuperer les variables sauvegardees
-     * du savedInstanceState et de les restaurees.
+     * du savedInstanceState et de les restaurer.
      */
     @Override
     public void onCreate (@Nullable Bundle savedInstanceState) {
@@ -70,7 +79,7 @@ public class CountryFragment extends Fragment {
 
     /**
      *Methode permettant d'associer les variables du programme aux variables de la vue et retourne
-     * une vue.
+     * la vue personnalisee.
      */
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,17 +93,12 @@ public class CountryFragment extends Fragment {
     /**
      * Methode permettant de faire afficher un layout personnaliser dans l'actionBar, de faire
      * afficher la liste des pays dans un listview a l'aide d'un curseur afin de pouvoir selectionner
-     * un pays.
+     * un pays. Il est possible de trier les pays selon differents parametres dans un menu dans
+     * l'actionBar.
      */
     @Override
     public void onActivityCreated (@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (savedInstanceState == null && sortOrder == null && sortField1 == null && sortField2 == null) {
-            sortField1 = ForecastDBContracts.CountryTable.FIELD_NAME;
-            sortField2 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
-            sortOrder = SortOrder.ASC;
-        }
 
         // Recupere le contexte du MainActivity
         context = getActivity();
@@ -103,6 +107,30 @@ public class CountryFragment extends Fragment {
         // Permet de mettre une vue personnalisee dans l'actionBar
         setCountryActionBar();
 
+        // Si tout est null, on met certaines valeurs a certains parametres au lancement du fragment.
+        // On veut trier les pays par nom, puis par continent, et on trie les pays en ordre croissant.
+        if (savedInstanceState == null && sortOrder == null && sortField1 == null && sortField2 == null) {
+            sortField1 = ForecastDBContracts.CountryTable.FIELD_NAME;
+            sortField2 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
+            sortOrder = SortOrder.ASC;
+        }
+
+        // Permet de recuperer le code du pays en le recuperant dans le dossier des shared preferences.
+        String countryCode = getSharedPreferences();
+
+        /*
+         * S'il y a un countryCode dans le fichier shared preferences, mais pas de id de ville, le
+         * pays est recuperer a l'aide de son code et on le passe en parametre d'une methode pour
+         * lancer le cityFragment. Il faut mettre la condition que le countryCode contienne une valeur
+         * et que la preference du id de la ville ne soit pas null pour lancer le prochain fragment.
+         */
+        if (countryCode != null && CityFragment.PREF_CITY_ID != null) {
+            Country country = Provider.getInstance().findCountryByCountryCode(context, countryCode);
+            startCityFragment(country);
+        }
+
+        // Curseur permettant de recuperer tous les pays depuis la base de donnees afin de les faire
+        // afficher dans un listview.
         Cursor countryCursor = Provider.getInstance().countryCursorOrdered(context, sortField1, sortField2, sortOrder);
         countryCursorAdapter = new CountryCursorAdapter(context, countryCursor, sortOrder);
         countriesList_listview.setAdapter(countryCursorAdapter);
@@ -113,15 +141,12 @@ public class CountryFragment extends Fragment {
 
         // Permet de mettre une barre a droite dans le listview pour naviguer plus rapidement
         countriesList_listview.setFastScrollEnabled(true);
-
-        if (! countryCode.isEmpty()) {
-            Country country = Provider.getInstance().findCountryByCountryCode(context, countryCode);
-            startCountryFragment(country);
-        }
     }
 
-    // Methode permettant de lancer le cityFragment a l'aide du id du pays selectionner ou enregistrer.
-    public void startCountryFragment(Country country) {
+    /**
+     * Methode permettant de lancer le cityFragment a l'aide du id du pays selectionner ou enregistrer.
+     */
+    public void startCityFragment(Country country) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.activity_main_fragment, CityFragment.newInstance(country.getId()))
                 .addToBackStack(null)
@@ -139,7 +164,9 @@ public class CountryFragment extends Fragment {
             countryCursor.moveToPosition(position);
             Country country = Provider.getInstance().getCountryFromCursor(countryCursor);
 
-            startCountryFragment(country);
+            // Permet d'enregistrer le id du pays selectionnee dans les shared preferences.
+            setSharedPreferences(country.getCode());
+            startCityFragment(country);
         }
     };
 
@@ -156,16 +183,37 @@ public class CountryFragment extends Fragment {
         }
 
         @Override
-        public void onNothingSelected (AdapterView<?> adapterView) {
+        public void onNothingSelected(AdapterView<?> adapterView) {
 
         }
     };
 
+    /**
+     * Methode permettant d'obtenir le code du pays enregistrer dans le fichier shared preferences.
+     */
+    private String getSharedPreferences() {
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getString(PREF_COUNTRY_CODE, null);
+    }
+
+    /**
+     * Methode permettant d'enregistrer le code du pays dans le fichier shared preferences.
+     */
+    private void setSharedPreferences (String countryCode) {
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREF_COUNTRY_CODE, countryCode);
+        editor.commit();
+    }
+
+    /**
+     * Methode permettant de mettre un titre et une imae dans l'actionBar.
+     */
     private void setCountryActionBar() {
         String actionBarTitle = getResources().getString(R.string.custom_action_bar_country_title);
-        int resId = R.mipmap.ic_country_flags;
+        int mipmapResId = R.mipmap.ic_country_flags;
 
-        CustomActionBar.setActionBar(getActivity(), actionBarTitle, resId);
+        CustomActionBar.setActionBar(getActivity(), actionBarTitle, mipmapResId);
     }
 
     /*
@@ -177,7 +225,7 @@ public class CountryFragment extends Fragment {
     }
 
     /*
-     * Methode permettant de mettre un menu avec des options dans le actionBar.
+     * Methode permettant de mettre un menu avec des options dans la actionBar.
      */
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
@@ -192,18 +240,18 @@ public class CountryFragment extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected (MenuItem item) {
-        // Triage des pays selon le nom du pays et le nom du continent
+        // Triage des pays selon le nom du pays, puis selon le nom du continent
         switch (item.getItemId()) {
             case R.id.country_menu_sort_by_country_name:
                 sortField1 = ForecastDBContracts.CountryTable.FIELD_NAME;
                 sortField2 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
                 break;
-            // Triage des pays selon le nom du continent et le nom du pays
+            // Triage des pays selon le nom du continent, puis selon le nom du pays
             case R.id.country_menu_sort_by_continent:
                 sortField1 = ForecastDBContracts.CountryTable.FIELD_CONTINENT;
                 sortField2 = ForecastDBContracts.CountryTable.FIELD_NAME;
                 break;
-            // Triage des pays selon la population et le nom du pays
+            // Triage des pays selon la population, puis selon le nom du pays
             case R.id.country_menu_sort_by_population:
                 sortField1 = ForecastDBContracts.CountryTable.FIELD_POPULATION;
                 sortField2 = ForecastDBContracts.CountryTable.FIELD_NAME;
@@ -211,14 +259,16 @@ public class CountryFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
+        // Permet de recuperer la liste des pays trier selon les 2 criteres, puis met a jour la
+        // listview.
         Provider.getInstance().countryCursorOrdered(context, sortField1, sortField2, sortOrder);
         refreshCursor();
+
         return true;
     }
 
     /*
-     * Methode permettant de sauvegarder les etats du countryFragment afin de pouvoir les restaures
+     * Methode permettant de sauvegarder les etats du countryFragment afin de pouvoir les restaurer
      * lors de la rotation de l'appareil.
      */
     @Override

@@ -8,22 +8,26 @@ import android.net.NetworkInfo;
  * Created by Anthony on 28/12/2016.
  */
 
+/**
+ * Classe permettant de verifiant la connection internet de l'appareil retournant un boolean
+ * indiquant la connection.
+ */
 public class NetworkConnection {
 
     /**
      * Methode permettant de verifier si l'appareil a une connection Internet. Retourne un boleen
-     * pour que le message de connection perdue soit afficher une seule fois.
+     * pour indiquer si l'appareil a la onnection internet ou pas.
      */
     public static boolean verifyNetworkConnection(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        boolean connected = false;
+        boolean connection = false;
 
         if (networkInfo != null) {
-            connected = networkInfo.isConnected();
+            connection = networkInfo.isConnected();
         }
 
-        return connected;
+        return connection;
     }
 
 }

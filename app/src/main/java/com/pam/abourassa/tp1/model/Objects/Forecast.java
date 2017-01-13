@@ -11,6 +11,11 @@ import java.util.ArrayList;
  * Created by Anthony on 30/12/2016.
  */
 
+/**
+ * Classe permettant de convertir les champs de la string JSON en objet Forecast. Association entre
+ * chacun des objets du JSON en attributs de l'objet Forecast. Classe parceler afin de conserver
+ * l'objet Forecast lors de la rotation de l'appareil.
+ */
 public class Forecast implements Parcelable {
     @SerializedName("coord")
     public Coord coord;
@@ -43,6 +48,7 @@ public class Forecast implements Parcelable {
         cityCod = in.readInt();
     }
 
+    // Getters et setters
     public Coord getCoord () {
         return coord;
     }
@@ -157,12 +163,14 @@ public class Forecast implements Parcelable {
         }
     };
 
+    // Permet d'avoir acces a la latitude et la longitude de la ville
     public class Coord {
         @SerializedName("lon")
         public float longitude;
         @SerializedName("lat")
         public float latitude;
 
+        // Getters et setters
         public float getLongitude () {
             return longitude;
         }
@@ -180,6 +188,9 @@ public class Forecast implements Parcelable {
         }
     }
 
+    /**
+     * Permet d'avoir acces a la description de la temperature ainsi qu'a l'icone de la ville
+     */
     public class Weather {
         @SerializedName("id")
         public int id;
@@ -190,6 +201,7 @@ public class Forecast implements Parcelable {
         @SerializedName("icon")
         public String icon;
 
+        // Getters et setters
         public int getId () {
             return id;
         }
@@ -223,6 +235,10 @@ public class Forecast implements Parcelable {
         }
     }
 
+    /**
+     * Permet d'avoir acces a la temperature (celsius), la pression (hPa), l'humidite, les temperatures
+     * maximum et minimum, le niveau de la mer ainsi que le niveau de la terre.
+     */
     public class Main {
         @SerializedName("temp")
         public String temperature;
@@ -239,6 +255,7 @@ public class Forecast implements Parcelable {
         @SerializedName("grnd_level")
         public float groundLevel;
 
+        // Getters et setters
         public String getTemperature () {
             return temperature;
         }
@@ -296,12 +313,16 @@ public class Forecast implements Parcelable {
         }
     }
 
+    /**
+     * Permet d'avoir acces a la vitesse du vent
+     */
     public class Wind {
         @SerializedName("speed")
         public float speed;
         @SerializedName("deg")
         public float deg;
 
+        // Getters et setters
         public float getSpeed () {
             return speed;
         }
@@ -332,6 +353,9 @@ public class Forecast implements Parcelable {
         }
     }
 
+    /**
+     * Permet d'avoir acces au message, au pays, au lever et au coucher du soleil
+     */
     public class Sys{
         @SerializedName("message")
         public float message;
@@ -342,6 +366,7 @@ public class Forecast implements Parcelable {
         @SerializedName("sunset")
         public int sunset;
 
+        // Getters et setters
         public float getMessage () {
             return message;
         }

@@ -19,6 +19,11 @@ import com.pam.abourassa.tp1.model.database.ForecastDBContracts;
  * Created by Anthony on 09/12/2016.
  */
 
+/**
+ * Adapter permettant de faire afficher les donnees desirees (noms des villes du pays) dans un
+ * listview avec un indexeur alphabetique permettant  de trouver une ville rapidement en affichant
+ * chaque lettre de l'alphabet en glissant la barre.
+ */
 public class CityCursorAdapter extends CursorAdapter implements SectionIndexer {
     private AlphabetIndexer alphaIndexer;
 
@@ -51,17 +56,15 @@ public class CityCursorAdapter extends CursorAdapter implements SectionIndexer {
      */
     @Override
     public void bindView (View view, Context context, Cursor cursor) {
+        // Recuperation de l'objet city et de ses attributs
         City city = Provider.getInstance().getCityFromCursor(cursor);
         String cityName = city.getName();
         String cityNameFirstLetterCapitalize = "";
         TextView cityName_textview = (TextView) view.findViewById(R.id.city_list_row_textview_cityName);
 
         if (city != null) {
-            /*
-             * Sert a prendre le nom de chaque ville et de mettre la premiere lettre de la ville
-             * en majuscule, puisqu'il y a au moins une ville en lettre minuscule dans le fichier
-             * csv alors que les autres villes commencent par une majuscule.
-             */
+            // Sert a mettre en majuscule la premiere lettre de chaque ville. Il y a des villes sans
+            // nom, donc on ne peut pas utiliser la methode .substring.
             if (! city.getName().isEmpty()) {
                 cityNameFirstLetterCapitalize = cityName.substring(0, 1).toUpperCase() + cityName.substring(1);
                 cityName_textview.setText(cityNameFirstLetterCapitalize);

@@ -13,19 +13,25 @@ import java.io.IOException;
  * Created by Anthony on 28/12/2016.
  */
 
+/**
+ * Provider permettant la gestion des drapeaux des pays. Celui-ci gere la sauvegarde de l'image (bitmap)
+ * dans la cache de l'application et le telechargement de celle-ci depuis cette cache.
+ */
 public class FlagsProvider {
+    public static final String SAVE_IMAGE_ERROR = "Save image error";
+    public static final String LOAD_IMAGE_ERROR = "Load image error";
 
     private static FlagsProvider instance = new FlagsProvider();
 
     /*
-     * Retourne une instance de FlagsProvider afin de pouvoir utiliser ses methodes.
+     * Retourne une instance de FlagsProvider afin d'avoir acces aux methodes du flagProvider.
      */
     public static FlagsProvider getInstance () {
         return instance;
     }
 
     /*
-     * Methode permettant de sauvegarder un bitmap dans le dossier cache de l'application.
+     * Methode permettant de sauvegarder une image (bitmap) dans le dossier cache de l'application.
      */
     public void saveImageInCacheFile(Bitmap bitmap, File cacheFile) {
         if (bitmap != null) {
@@ -34,7 +40,7 @@ public class FlagsProvider {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                 fileOutputStream.close();
             } catch (IOException e) {
-                Log.i("Save image", "An error occured during the backup !");
+                Log.i(SAVE_IMAGE_ERROR, "An error occurred during image backup !");
                 e.printStackTrace();
             }
         }
@@ -52,7 +58,7 @@ public class FlagsProvider {
             bitmap = BitmapFactory.decodeFile(cacheFilePath);
             fileInputStream.close();
         } catch (Exception e) {
-            Log.d("Load image", "Exception 3, Something went wrong!");
+            Log.d(LOAD_IMAGE_ERROR, "An error occurred during image loading !");
             e.printStackTrace();
         }
         return bitmap;
